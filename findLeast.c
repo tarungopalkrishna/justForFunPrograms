@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define bufferSize 200
 int* readArray(int *number)
 {
 	int *memoryPointer;
@@ -52,7 +51,7 @@ void findLeast(int *inputArray,int arraySize)
 	}
 	printf(" The %drd number from the end is: %d\n", numberFromEnd,*(inputArray+numberFromEnd - 1));
 }
-int main(int argc, char const *argv[])
+int main()
 {
 	int *inputArray,arraySize;
 	inputArray = readArray(&arraySize);
