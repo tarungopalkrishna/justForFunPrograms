@@ -19,8 +19,7 @@ int* readArray(int *number)
 void showArray(int *inputArray,int arraySize)
 {
 	printf(" The array is:");
-	for (int i = 0; i < arraySize; ++i)
-	{
+	for (int i = 0; i < arraySize; ++i){
 		printf(" %d", *(inputArray+i));
 	}
 	printf("\n");
