@@ -3,18 +3,25 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #define bufferSize 2000
-void searchPattern(char *pattern,char *buffer)
+int globalLineCounter = 0,globalOccurencesCounter = 0;
+int searchPattern(char *pattern,char *buffer)
 {
+	int flag = 0;
 	//printf(" The pattern to be searched is: %s\n", pattern);
 	//printf(" The buffer is: %s", buffer);
 	for(int i=0;i < strlen(buffer);i++){
 		for (int j = 0; j < strlen(pattern); j++){
-			printf(" i==%d j==%d %c==%c\n", i,j,*(buffer+i),*(pattern+j));
+			//printf(" i==%d j==%d %c==%c\n", i,j,*(buffer+i),*(pattern+j));
 			if(*(buffer+i)==*(pattern+j)){
-				printf(" It has matched. %c == %c YES!\n",*(buffer+i),*(pattern+j));
+				//printf(" It has matched. %c == %c YES!\n",*(buffer+i),*(pattern+j));
 				i++;
 				if(j == strlen(pattern) - 1){
-					printf(" This has matched during the search : %s\n", buffer);
+					if(flag == 0){
+						globalLineCounter++;
+					}
+					globalOccurencesCounter++;
+					flag = 1;
+					printf(" %d -> %s\n", globalLineCounter,buffer);
 				}
 			}
 			else{
@@ -22,9 +29,11 @@ void searchPattern(char *pattern,char *buffer)
 			}
 		}
 	}
+	return flag;
 }
 int openFileToSearch(char *pattern,char *fileName)
 {
+	int flag = 0;
 	char *buffer;
 	FILE *file;
 	file = fopen(fileName,"r");
@@ -41,12 +50,20 @@ int openFileToSearch(char *pattern,char *fileName)
 				scanf("%s",buffer);
 				continue;
 			}
-			searchPattern(pattern,buffer);
+			*(buffer + strlen(buffer) - 1) = '\0'; /* To remove the newline character at the end of the line*/
+			if(searchPattern(pattern,buffer) == 1){
+				flag = 1;
+			}
 		}
 	}
 	fclose(file);
 	free(buffer);
-	return 0;
+	if(flag == 1){
+		return 1;
+	}
+	else{
+		return 0;
+	}
 }
 char *newAllocation(int n,...)
 {
@@ -81,19 +98,19 @@ void invalidMessage()
 	printf(" Invalid number of arguments passed to sub program.\n");
 	return;
 }
-int freeMemory(char *one,char *two,char *three,char *four,char *buffer)
+void freeMemory(char *one,char *two,char *three,char *four,char *buffer)
 {
-	printf(" one   : %p\n", one);
-	printf(" two   : %p\n", two);
-	printf(" three : %p\n", three);
-	printf(" four  : %p\n", four);
-	printf(" buffer  : %p\n", buffer);
+	//printf(" one   : %p\n", one);
+	//printf(" two   : %p\n", two);
+	//printf(" three : %p\n", three);
+	//printf(" four  : %p\n", four);
+	//printf(" buffer  : %p\n", buffer);
 	free(one);
 	free(two);
 	free(three);
 	free(four);
 	free(buffer);
-	return 0;
+	return;
 }
 int main(int argc, char const *argv[])
 {
@@ -121,9 +138,11 @@ int main(int argc, char const *argv[])
 		if(openFileToSearch(pattern,completePathName) == 0){
 			printf(" Pattern NOT found.\n");
 		}
-		if(freeMemory(fileName,currentDirectory,pattern,completePathName,buffer) != 0){
-			printf(" There was an error freeing the allocated memory.\n");
+		else{
+			printf(" The globalOccurencesCounter value is: %d\n", globalOccurencesCounter);
+			printf(" The globalLineCounter value is: %d\n", globalLineCounter);
 		}
+		freeMemory(fileName,currentDirectory,pattern,completePathName,buffer);
 	}
 	return 0;
 }
