@@ -18,10 +18,10 @@ int searchPattern(char *pattern,char *buffer)
 				if(j == strlen(pattern) - 1){
 					if(flag == 0){
 						globalLineCounter++;
+						printf(" %d -> %s\n", globalLineCounter,buffer);
 					}
 					globalOccurencesCounter++;
 					flag = 1;
-					printf(" %d -> %s\n", globalLineCounter,buffer);
 				}
 			}
 			else{
