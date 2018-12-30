@@ -1,0 +1,52 @@
+/usr/include/argp.h:222:     string, which should be malloced, and will be freed by argp, or NULL,
+/usr/include/dirent.h:248:   Entries for which SELECT returns nonzero are individually malloc'd,
+/usr/include/dirent.h:249:   sorted using qsort with CMP, and collected in a malloc'd array in
+/usr/include/execinfo.h:31:   malloc()ed memory block.  */
+/usr/include/gnu-versions.h:46:#define _GNU_OBSTACK_INTERFACE_VERSION	1 /* vs malloc/obstack.c */
+/usr/include/malloc.h:1:/* Prototypes and definition for malloc implementation.
+/usr/include/malloc.h:38:extern void *malloc (size_t __size) __THROW __attribute_malloc__ __wur;
+/usr/include/malloc.h:42:__THROW __attribute_malloc__ __wur;
+/usr/include/malloc.h:46:/* __attribute_malloc__ is not used, because if realloc returns
+/usr/include/malloc.h:54:/* __attribute_malloc__ is not used, because if reallocarray returns
+/usr/include/malloc.h:60:/* Free a block allocated by `malloc', `realloc' or `calloc'.  */
+/usr/include/malloc.h:65:__THROW __attribute_malloc__ __wur;
+/usr/include/malloc.h:68:extern void *valloc (size_t __size) __THROW __attribute_malloc__ __wur;
+/usr/include/malloc.h:72:extern void *pvalloc (size_t __size) __THROW __attribute_malloc__ __wur;
+/usr/include/malloc.h:80:__THROW __attribute_malloc__;
+/usr/include/malloc.h:95:  int keepcost; /* top-most, releasable (via malloc_trim) space */
+/usr/include/malloc.h:106:# define M_NLBLKS  2    /* UNUSED in this malloc */
+/usr/include/malloc.h:109:# define M_GRAIN   3    /* UNUSED in this malloc */
+/usr/include/malloc.h:112:# define M_KEEP    4    /* UNUSED in this malloc */
+/usr/include/malloc.h:130:extern int malloc_trim (size_t __pad) __THROW;
+/usr/include/malloc.h:134:extern size_t malloc_usable_size (void *__ptr) __THROW;
+/usr/include/malloc.h:137:extern void malloc_stats (void) __THROW;
+/usr/include/malloc.h:140:extern int malloc_info (int __options, FILE *__fp) __THROW;
+/usr/include/malloc.h:146:extern void *(*__MALLOC_HOOK_VOLATILE __malloc_hook)(size_t __size,
+/usr/include/malloc.h:160:extern void __malloc_check_init (void) __THROW __MALLOC_DEPRECATED;
+/usr/include/malloc.h:164:#endif /* malloc.h */
+/usr/include/mcheck.h:38:   before `malloc' is ever called.  ABORTFUNC is called with an error code
+/usr/include/mcheck.h:50:/* Check for aberrations in a particular malloc'd block.  You must have
+/usr/include/regex.h:471:   `regcomp', with a malloc'ed value, or set to NULL before calling
+/usr/include/regex.h:517:   allocated with malloc, and must each be at least `NUM_REGS * sizeof
+/usr/include/stdio.h:189:   is allocated by `malloc'.  */
+/usr/include/stdio.h:191:     __THROW __attribute_malloc__ __wur;
+/usr/include/stdio.h:281:/* Open a stream that writes into a malloc'd buffer that is expanded as
+/usr/include/stdio.h:350:/* Write formatted output to a string dynamically allocated with `malloc'.
+/usr/include/stdio.h:594:   (and null-terminate it). *LINEPTR is a pointer returned from malloc (or
+/usr/include/stdlib.h:539:extern void *malloc (size_t __size) __THROW __attribute_malloc__ __wur;
+/usr/include/stdlib.h:542:     __THROW __attribute_malloc__ __wur;
+/usr/include/stdlib.h:546:/* __attribute_malloc__ is not used, because if realloc returns
+/usr/include/stdlib.h:555:/* __attribute_malloc__ is not used, because if reallocarray returns
+/usr/include/stdlib.h:562:/* Free a block allocated by `malloc', `realloc' or `calloc'.  */
+/usr/include/stdlib.h:572:extern void *valloc (size_t __size) __THROW __attribute_malloc__ __wur;
+/usr/include/stdlib.h:584:     __THROW __attribute_malloc__ __attribute_alloc_size__ ((2)) __wur;
+/usr/include/stdlib.h:785:/* Return a malloc'd string containing the canonical absolute name of the
+/usr/include/stdlib.h:793:   null, the result is malloc'd; otherwise, if the canonical name is
+/usr/include/string.h:165:/* Duplicate S, returning an identical malloc'd string.  */
+/usr/include/string.h:167:     __THROW __attribute_malloc__ __nonnull ((1));
+/usr/include/string.h:170:/* Return a malloc'd copy of at most N bytes of STRING.  The
+/usr/include/string.h:175:     __THROW __attribute_malloc__ __nonnull ((1));
+/usr/include/unistd.h:511:   an array is allocated with `malloc'; the array is SIZE
+/usr/include/unistd.h:517:/* Return a malloc'd string containing the current directory name.
+/usr/include/wchar.h:153:/* Duplicate S, returning an identical malloc'd string.  */
+/usr/include/wchar.h:154:extern wchar_t *wcsdup (const wchar_t *__s) __THROW __attribute_malloc__;

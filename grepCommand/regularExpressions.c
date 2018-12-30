@@ -3,17 +3,31 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #define bufferSize 2000
-#define maxArguments 4
+#define maxArguments 5
+/* 
+	The case 'r' is a new addition which searches the pattern string in the reverse manner
+	I'm sorry if there is already an option with that functionality
+*/
 /*
-Return values:
-0 -> successful run.
-1 -> Memeory was not allocated properly.
-2 -> File failed to open.
+	Return values:
+	0 -> successful run.
+	1 -> Memeory was not allocated properly.
+	2 -> File failed to open.
 */
 int globalLineCounter = 0,globalOccurencesCounter = 0;
 void charcmpi(char a,char b)
 {
 
+}
+int optionContains(char a,char *options)
+{
+	//int flag = 0;
+	for(int i=0;i<strlen(options);i++){
+		if(a == *(options + i)){
+			return 1;
+		}
+	}
+	return 0;
 }
 int searchPattern(char *pattern,char *buffer)
 {
@@ -44,17 +58,17 @@ int searchPattern(char *pattern,char *buffer)
 	}
 	return flag;
 }
-int openFileToSearch(char *pattern,char *fileName)
+int openFileToSearch(char *pattern,char *fileName,char *option)
 {
 	int flag = 0;
-	char *buffer;
+	char *buffer = NULL;
 	FILE *file;
 	file = fopen(fileName,"r");
 	if(file == NULL){
 		printf(" The file %s was not able to open.\n", fileName);
 		return -1;
 	}
-	else{
+	else if(option == NULL){
 		buffer = (char*)malloc(bufferSize);
 		while(fgets(buffer,bufferSize,file) != NULL){
 			//printf(" The lenght of the characters read is: %ld\n", strlen(buffer));
@@ -65,10 +79,54 @@ int openFileToSearch(char *pattern,char *fileName)
 				continue;
 			}
 			*(buffer + strlen(buffer) - 1) = '\0'; /* To remove the newline character at the end of the line*/
-			/* I will need to modify this to a switch case within a for loop because of the options*/
 			if(searchPattern(pattern,buffer) == 1){
 				flag = 1;
 			}
+		}
+	}
+	else{
+		buffer = (char*)malloc(bufferSize);
+		//printf("->%s<-\n", option);
+		while(fgets(buffer,bufferSize,file) != NULL){
+			if(strlen(buffer) == bufferSize - 1){
+				printf(" The prgram will not work for this line.\n");
+				printf(" Enter 'y' to continue......");
+				scanf("%s",buffer);
+				continue;
+	 		}
+			*(buffer + strlen(buffer) - 1) = '\0'; /* To remove the newline character at the end of the line*/
+			if(optionContains('i',option+1) == 1){
+				printf(" Contains i.\n");
+			}
+			if(optionContains('r',option+1) == 1){
+				printf(" Contains r.\n");
+			}
+			if(optionContains('v',option+1) == 1){
+				printf(" Contains v.\n");
+			}
+			if(optionContains('z',option+1) == 1){
+				printf(" Contains 0.\n");
+			}
+			if(optionContains('z',option+1) == 1){
+				printf(" Contains 0.\n");
+			}
+			if(optionContains('z',option+1) == 1){
+				printf(" Contains 0.\n");
+			}
+			/*
+			for(int i=1;i<strlen(option);i++){
+				switch(*(option+i)){
+					case 'v' :	printf(" Case v is working.\n");
+								break;
+					case 'i' :	printf(" Case i is working.\n");
+								break;
+					case 'r' :	printf(" Case r is working.\n");
+								break;
+					default  :	printf(" Okay\n");
+				}
+			}
+			*/
+			break;		
 		}
 	}
 	fclose(file);
@@ -113,12 +171,13 @@ void invalidMessage()
 	printf(" Invalid number of arguments passed to sub program.\n");
 	return;
 }
-void freeMemory(char *one,char *two,char *three,char *four,char *buffer)
+void freeMemory(char *one,char *two,char *three,char *four,char *buffer,char *five)
 {
 	printf(" one   : %p\n", one);
 	printf(" two   : %p\n", two);
 	printf(" three : %p\n", three);
 	printf(" four  : %p\n", four);
+	printf(" five  : %p\n", five);
 	printf(" buffer  : %p\n", buffer);
 	if (one != NULL){
 		free(one);	
@@ -129,9 +188,12 @@ void freeMemory(char *one,char *two,char *three,char *four,char *buffer)
 	if (three != NULL){
 		free(three);
 	}
-	//if (four != NULL){
-	//	free(four);
-	//}
+	if (four != NULL){
+		free(four);
+	}
+	if (five != NULL){
+		free(five);
+	}
 	if (buffer != NULL){
 		free(buffer);
 	}
@@ -139,19 +201,13 @@ void freeMemory(char *one,char *two,char *three,char *four,char *buffer)
 }
 int main(int argc, char const *argv[])
 {
-	//printf("      %p\n", &argv);
-	//printf("%p\n", **argv);
-	//for (int i = 0; i < argc; ++i){
-	//	printf("%s ", argv[i]);
-	//}
-	//exit(0);
 	if(argc > maxArguments){
 		invalidMessage();
 	}
 	else{
 		int newBytes,switchCase,searchReturnValue;
-		char *fileName,*currentDirectory,*pattern,*completePathName;
-		char *buffer;
+		char *fileName=NULL,*currentDirectory=NULL,*pattern=NULL,*completePathName=NULL,*option=NULL;
+		char *buffer = NULL;
 		//switchCase = checkIfHasOption(argc,*argv);
 		buffer = (char*)malloc(bufferSize);
 		if(buffer == NULL){
@@ -159,11 +215,11 @@ int main(int argc, char const *argv[])
 			return 1;
 		}
 		for (int i = 0; i < argc; ++i){
-			printf("%s\n", argv[i]);
+			//printf("%s\n", argv[i]);
 			strcpy(buffer,argv[i]);
-			printf("%c\n", *(buffer));
+			//printf("%c\n", *(buffer));
 			if(*(buffer) == '-'){
-				printf(" This is an option.\n");
+				//printf(" This is an option.\n");
 				switchCase = 2;
 				break;
 			}
@@ -180,22 +236,32 @@ int main(int argc, char const *argv[])
 					fileName = newAllocation(1,buffer);
 					newBytes = strlen(currentDirectory) + strlen(fileName);
 					completePathName = newAllocation(2,currentDirectory,fileName);
-					searchReturnValue = openFileToSearch(pattern,completePathName);
-					if (searchReturnValue == 2){
-						break;
-					}
-					else if(searchReturnValue == 0){
-						printf(" Pattern NOT found.\n");
-					}
-					else{
-						printf(" The globalOccurencesCounter value is: %d\n", globalOccurencesCounter);
-						printf(" The globalLineCounter value is: %d\n", globalLineCounter);
-					}
-			case 2 :break;
+					break;
+			case 2 :strcpy(buffer,argv[1]);
+					option = newAllocation(1,buffer);
+					strcpy(buffer,argv[2]);
+					pattern = newAllocation(1,buffer);
+					strcpy(buffer,argv[3]);
+					currentDirectory = newAllocation(1,buffer);
+					strcpy(buffer,"/");
+					strcat(buffer,argv[4]);
+					fileName = newAllocation(1,buffer);
+					newBytes = strlen(currentDirectory) + strlen(fileName);
+					completePathName = newAllocation(2,currentDirectory,fileName);
+					//printf("%s - %s - %s - %s - %s - %d\n", option,pattern,currentDirectory,fileName,completePathName,newBytes);
+					break;
 			default:printf(" Something went horribally wrong!.\n");
 					exit(0);
 		}
-		freeMemory(fileName,currentDirectory,pattern,completePathName,buffer);
+		searchReturnValue = openFileToSearch(pattern,completePathName,option);
+		if(searchReturnValue == 0){
+			printf(" Pattern NOT found.\n");
+		}
+		else if(searchReturnValue != 2){
+			printf(" The globalOccurencesCounter value is: %d\n", globalOccurencesCounter);
+			printf(" The globalLineCounter value is: %d\n", globalLineCounter);
+		}
+		freeMemory(fileName,currentDirectory,pattern,completePathName,buffer,option);
 	}
 	return 0;
 }
