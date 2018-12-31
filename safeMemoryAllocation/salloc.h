@@ -13,8 +13,6 @@
 #ifdef __SAFE_ALLOC
 struct __memoryTable
 {
-	//int 	memoryId;
-	//char 	*pointerName;
 	void 	*memoryAddress;
 	int 	memorySize;		//Think later if you want to make this pointer variable.
 	struct __memoryTable *__leftlink;
@@ -123,29 +121,6 @@ void *smalloc(char *dataType,unsigned int size)
 		}
 	}
 	return pointer;
-	/*
-	if(strcmp(dataType,"int") == 0){
-		printf(" int dataType.\n");
-		pointer = malloc(size);
-		if(__pushLinkedList(pointer) == 0){
-			printf(" The push into the linked list was unsuccessful.\n");;
-		}
-		return pointer;
-	}
-	else if(strcmp(dataType,"char") == 0){
-		printf(" char dataType.\n");
-	}
-	else if(strcmp(dataType,"float") == 0){
-		printf(" float dataType.\n");
-	}
-	else if(strcmp(dataType,"double") == 0){
-		printf(" double dataType.\n");
-	}
-	else{
-		printf(" Not a dataType.\n");
-		return NULL;
-	}
-	*/
 }
 int sfree(void *pointerAddress)
 {
@@ -175,14 +150,3 @@ int freeAllMemeory()
 	}
 }
 #endif
-/* FOR TESTING PURPOSES */
-/*
-int main()
-{
-	int *charPointer;
-	charPointer = smalloc("int",sizeof(int));
-	getMemoryStatus();
-	sfree(charPointer);
-	freeAllMemeory();
-}
-*/
