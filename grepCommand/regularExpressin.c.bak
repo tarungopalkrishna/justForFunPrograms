@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include "../safeMemoryAllocation/salloc.h"
 #define bufferSize 2000
 #define maxArguments 5
 /* 
@@ -70,7 +69,7 @@ int openFileToSearch(char *pattern,char *fileName,char *option)
 		return -1;
 	}
 	else if(option == NULL){
-		buffer = (char*)smalloc(bufferSize);
+		buffer = (char*)malloc(bufferSize);
 		while(fgets(buffer,bufferSize,file) != NULL){
 			//printf(" The lenght of the characters read is: %ld\n", strlen(buffer));
 			if(strlen(buffer) == bufferSize - 1){
@@ -86,7 +85,7 @@ int openFileToSearch(char *pattern,char *fileName,char *option)
 		}
 	}
 	else{
-		buffer = (char*)smalloc(bufferSize);
+		buffer = (char*)malloc(bufferSize);
 		//printf("->%s<-\n", option);
 		while(fgets(buffer,bufferSize,file) != NULL){
 			if(strlen(buffer) == bufferSize - 1){
@@ -131,7 +130,7 @@ int openFileToSearch(char *pattern,char *fileName,char *option)
 		}
 	}
 	fclose(file);
-	sfree(buffer);
+	free(buffer);
 	if(flag == 1){
 		return 1;
 	}
@@ -148,21 +147,16 @@ char *newAllocation(int n,...)
 		va_start(argument, n);
 		stringParser 	= va_arg(argument,char*);
 		size 			= size + strlen(stringParser);
-		returnString 	= (char*)smalloc(size);
+		returnString 	= (char*)malloc(size);
 		strcpy(returnString,stringParser);
 		/* This part of the code is not tested for multile cases*/
-		//getMemoryStatus();
 		while(count < n){
-			//printf(" Inside working\n");
 			stringParser 	= va_arg(argument,char*);
-			//printf(" stringParser:%s\n", stringParser);
 			size 			= size + strlen(stringParser);
-			//printf(" size:%d\n", size);
-			returnString 	= (char*)srealloc(returnString,size);
+			returnString 	= (char*)realloc(returnString,size);
 			strcat(returnString,stringParser);
 			count++;
 		}
-		//getMemoryStatus();
 		/* End of not tested code*/
 		va_end(argument);
 		return returnString;
@@ -177,7 +171,6 @@ void invalidMessage()
 	printf(" Invalid number of arguments passed to sub program.\n");
 	return;
 }
-/*
 void freeMemory(char *one,char *two,char *three,char *four,char *buffer,char *five)
 {
 	printf(" one   : %p\n", one);
@@ -187,26 +180,25 @@ void freeMemory(char *one,char *two,char *three,char *four,char *buffer,char *fi
 	printf(" five  : %p\n", five);
 	printf(" buffer  : %p\n", buffer);
 	if (one != NULL){
-		sfree(one);	
+		free(one);	
 	}
 	if (two != NULL){
-		sfree(two);
+		free(two);
 	}
 	if (three != NULL){
-		sfree(three);
+		free(three);
 	}
 	if (four != NULL){
-		sfree(four);
+		free(four);
 	}
 	if (five != NULL){
-		sfree(five);
+		free(five);
 	}
 	if (buffer != NULL){
-		sfree(buffer);
+		free(buffer);
 	}
 	return;
 }
-*/
 int main(int argc, char const *argv[])
 {
 	if(argc > maxArguments){
@@ -217,7 +209,7 @@ int main(int argc, char const *argv[])
 		char *fileName=NULL,*currentDirectory=NULL,*pattern=NULL,*completePathName=NULL,*option=NULL;
 		char *buffer = NULL;
 		//switchCase = checkIfHasOption(argc,*argv);
-		buffer = (char*)smalloc(bufferSize);
+		buffer = (char*)malloc(bufferSize);
 		if(buffer == NULL){
 			printf(" Memory was not allocated to the buffer.\n");
 			return 1;
@@ -236,23 +228,14 @@ int main(int argc, char const *argv[])
 		printf(" switchCase is: %d\n", switchCase);
 		switch(switchCase){
 			case 1 :strcpy(buffer,argv[1]);
-					//printf(" Before pattern\n");
 					pattern = newAllocation(1,buffer);
-					//printf(" The pointer of pattern is: %p\n", pattern);
-					//printf(" After pattern\n");
 					strcpy(buffer,argv[2]);
-					//printf(" Before currentDirectory\n");
 					currentDirectory = newAllocation(1,buffer);
-					//printf(" Before currentDirectory_1\n");
 					strcpy(buffer,"/");
-					//printf(" Before currentDirectory_2\n");
 					strcat(buffer,argv[3]);
-					//printf(" Before fileName\n");
 					fileName = newAllocation(1,buffer);
 					newBytes = strlen(currentDirectory) + strlen(fileName);
-					//printf(" %s : %s\n", currentDirectory,fileName);
 					completePathName = newAllocation(2,currentDirectory,fileName);
-					//printf(" completePathName : %s\n", completePathName);
 					break;
 			case 2 :strcpy(buffer,argv[1]);
 					option = newAllocation(1,buffer);
@@ -270,7 +253,6 @@ int main(int argc, char const *argv[])
 			default:printf(" Something went horribally wrong!.\n");
 					exit(0);
 		}
-		//printf("Send HELP\n");
 		searchReturnValue = openFileToSearch(pattern,completePathName,option);
 		if(searchReturnValue == 0){
 			printf(" Pattern NOT found.\n");
@@ -279,13 +261,7 @@ int main(int argc, char const *argv[])
 			printf(" The globalOccurencesCounter value is: %d\n", globalOccurencesCounter);
 			printf(" The globalLineCounter value is: %d\n", globalLineCounter);
 		}
-		else{
-			printf(" File \"%s\" not albe to open.\n", completePathName);
-		}
-		//printf(" Number of elemets left before clean: %d\n", getMemoryStatus());
-		freeAllMemeory();
-		//printf(" Number of elemets left after clean : %d\n", getMemoryStatus());
-		//freeMemory(fileName,currentDirectory,pattern,completePathName,buffer,option);
+		freeMemory(fileName,currentDirectory,pattern,completePathName,buffer,option);
 	}
 	return 0;
 }

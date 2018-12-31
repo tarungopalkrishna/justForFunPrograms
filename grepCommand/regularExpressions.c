@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include "../safeMemoryAllocation/salloc.h" /* This header file is defined by me for safe memory allocation and deallocation */
 #define bufferSize 2000
 #define maxArguments 5
 /* 
@@ -21,7 +22,6 @@ void charcmpi(char a,char b)
 }
 int optionContains(char a,char *options)
 {
-	//int flag = 0;
 	for(int i=0;i<strlen(options);i++){
 		if(a == *(options + i)){
 			return 1;
@@ -69,9 +69,8 @@ int openFileToSearch(char *pattern,char *fileName,char *option)
 		return -1;
 	}
 	else if(option == NULL){
-		buffer = (char*)malloc(bufferSize);
+		buffer = (char*)smalloc(bufferSize);
 		while(fgets(buffer,bufferSize,file) != NULL){
-			//printf(" The lenght of the characters read is: %ld\n", strlen(buffer));
 			if(strlen(buffer) == bufferSize - 1){
 				printf(" The prgram will not work for this line.\n");
 				printf(" Enter 'y' to continue......");
@@ -85,7 +84,7 @@ int openFileToSearch(char *pattern,char *fileName,char *option)
 		}
 	}
 	else{
-		buffer = (char*)malloc(bufferSize);
+		buffer = (char*)smalloc(bufferSize);
 		//printf("->%s<-\n", option);
 		while(fgets(buffer,bufferSize,file) != NULL){
 			if(strlen(buffer) == bufferSize - 1){
@@ -113,24 +112,11 @@ int openFileToSearch(char *pattern,char *fileName,char *option)
 			if(optionContains('z',option+1) == 1){
 				printf(" Contains 0.\n");
 			}
-			/*
-			for(int i=1;i<strlen(option);i++){
-				switch(*(option+i)){
-					case 'v' :	printf(" Case v is working.\n");
-								break;
-					case 'i' :	printf(" Case i is working.\n");
-								break;
-					case 'r' :	printf(" Case r is working.\n");
-								break;
-					default  :	printf(" Okay\n");
-				}
-			}
-			*/
 			break;		
 		}
 	}
 	fclose(file);
-	free(buffer);
+	sfree(buffer);
 	if(flag == 1){
 		return 1;
 	}
@@ -147,13 +133,13 @@ char *newAllocation(int n,...)
 		va_start(argument, n);
 		stringParser 	= va_arg(argument,char*);
 		size 			= size + strlen(stringParser);
-		returnString 	= (char*)malloc(size);
+		returnString 	= (char*)smalloc(size);
 		strcpy(returnString,stringParser);
 		/* This part of the code is not tested for multile cases*/
 		while(count < n){
 			stringParser 	= va_arg(argument,char*);
 			size 			= size + strlen(stringParser);
-			returnString 	= (char*)realloc(returnString,size);
+			returnString 	= (char*)srealloc(returnString,size);
 			strcat(returnString,stringParser);
 			count++;
 		}
@@ -171,34 +157,6 @@ void invalidMessage()
 	printf(" Invalid number of arguments passed to sub program.\n");
 	return;
 }
-void freeMemory(char *one,char *two,char *three,char *four,char *buffer,char *five)
-{
-	printf(" one   : %p\n", one);
-	printf(" two   : %p\n", two);
-	printf(" three : %p\n", three);
-	printf(" four  : %p\n", four);
-	printf(" five  : %p\n", five);
-	printf(" buffer  : %p\n", buffer);
-	if (one != NULL){
-		free(one);	
-	}
-	if (two != NULL){
-		free(two);
-	}
-	if (three != NULL){
-		free(three);
-	}
-	if (four != NULL){
-		free(four);
-	}
-	if (five != NULL){
-		free(five);
-	}
-	if (buffer != NULL){
-		free(buffer);
-	}
-	return;
-}
 int main(int argc, char const *argv[])
 {
 	if(argc > maxArguments){
@@ -209,13 +167,12 @@ int main(int argc, char const *argv[])
 		char *fileName=NULL,*currentDirectory=NULL,*pattern=NULL,*completePathName=NULL,*option=NULL;
 		char *buffer = NULL;
 		//switchCase = checkIfHasOption(argc,*argv);
-		buffer = (char*)malloc(bufferSize);
+		buffer = (char*)smalloc(bufferSize);
 		if(buffer == NULL){
 			printf(" Memory was not allocated to the buffer.\n");
 			return 1;
 		}
 		for (int i = 0; i < argc; ++i){
-			//printf("%s\n", argv[i]);
 			strcpy(buffer,argv[i]);
 			//printf("%c\n", *(buffer));
 			if(*(buffer) == '-'){
@@ -261,7 +218,10 @@ int main(int argc, char const *argv[])
 			printf(" The globalOccurencesCounter value is: %d\n", globalOccurencesCounter);
 			printf(" The globalLineCounter value is: %d\n", globalLineCounter);
 		}
-		freeMemory(fileName,currentDirectory,pattern,completePathName,buffer,option);
+		else{
+			printf(" File \"%s\" not albe to open.\n", completePathName);
+		}
+		freeAllMemeory();
 	}
 	return 0;
 }
