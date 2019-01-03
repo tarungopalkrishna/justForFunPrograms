@@ -139,6 +139,19 @@ void *smalloc(unsigned int size)
 	}
 	return pointer;
 }
+void *scalloc(unsigned int arraySize,unsigned int size)
+{
+	void *pointer = NULL;
+	pointer = calloc(arraySize,size);
+	if(pointer!=NULL){
+		if(__pushLinkedList(pointer,size) == 1){
+			//printf(" The push into the linked list was unsuccessful.\n");
+			free(pointer);
+		}
+	}
+	//printf(" The allocated memory location is: %p\n", pointer);
+	return pointer;	
+}
 void *srealloc(void *pointerAddress,unsigned int size) /* Returns NULL if an error occured*/
 {
 	struct __memoryTable *temp;

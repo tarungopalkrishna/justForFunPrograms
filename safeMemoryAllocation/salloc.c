@@ -94,7 +94,7 @@ unsigned int __pushLinkedList(void *pointerAddress,unsigned int size)
 		return 0;
 	}
 }
-unsigned int __popLinkedList(void *pointerAddress)
+unsigned int __popLinkedList(void *pointerAddress) // Code can be optimizes to return a proper value
 {
 	struct __memoryTable *temp,*prev;
 	if(__memoryTableStart__ == NULL){
@@ -158,6 +158,19 @@ void *smalloc(unsigned int size)
 	}
 	//printf(" The allocated memory location is: %p\n", pointer);
 	return pointer;
+}
+void *scalloc(unsigned int arraySize,unsigned int size)
+{
+	void *pointer = NULL;
+	pointer = calloc(arraySize,size);
+	if(pointer!=NULL){
+		if(__pushLinkedList(pointer,size) == 1){
+			//printf(" The push into the linked list was unsuccessful.\n");
+			free(pointer);
+		}
+	}
+	//printf(" The allocated memory location is: %p\n", pointer);
+	return pointer;	
 }
 void *srealloc(void *pointerAddress,unsigned int size) /* Returns NULL if an error occured*/
 {
