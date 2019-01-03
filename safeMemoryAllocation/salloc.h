@@ -6,15 +6,12 @@
 #endif
 /* 
 	Using a doubly linked list to store the allocated space
-	Please keep in mind this program only support int,char,float,double.(Not quite sure)
 	0 -> Success
 	1 -> Failure
 */
 #ifdef __SAFE_ALLOC
 struct __memoryTable
 {
-	//int 	memoryId;
-	//char 	*pointerName;
 	void 	*memoryAddress;
 	unsigned int 	memorySize;		//Think later if you want to make this pointer variable.
 	struct __memoryTable *__leftlink;
@@ -49,7 +46,6 @@ unsigned int getMemoryStatus()
 	unsigned int count = 0;
 	struct __memoryTable *temp;
 	if(__memoryTableStart__ == NULL){
-		//printf(" No allocated memory.\n");
 		return 0;
 	}
 	else{
@@ -73,13 +69,9 @@ unsigned int __pushLinkedList(void *pointerAddress,unsigned int size)
 	struct __memoryTable *temp;
 	temp = __getMemory(pointerAddress,size);
 	if(temp == NULL){
-		//printf(" Cannot push to linked list due to insufficient memory.\n");
 		return 1;
 	}
 	else{
-		//printf(" I - __memoryTableStart__ = %p\n", __memoryTableStart__);
-		//printf(" I - __memoryTableEnd__   = %p\n", __memoryTableEnd__);
-		//printf(" The memory address to be inserted is: %p\n", temp);
 		if(__memoryTableStart__ == NULL){
 			__memoryTableStart__ = temp;
 			__memoryTableEnd__   = temp;
@@ -89,9 +81,6 @@ unsigned int __pushLinkedList(void *pointerAddress,unsigned int size)
 			__memoryTableEnd__ -> __rightlink = temp;
 			__memoryTableEnd__ = __memoryTableEnd__ -> __rightlink;
 		}
-		//printf(" O - __memoryTableStart__ = %p\n", __memoryTableStart__);
-		//printf(" O - __memoryTableEnd__   = %p\n", __memoryTableEnd__);
-		//getMemoryStatus();
 		return 0;
 	}
 }
@@ -99,15 +88,11 @@ unsigned int __popLinkedList(void *pointerAddress)
 {
 	struct __memoryTable *temp,*prev;
 	if(__memoryTableStart__ == NULL){
-		//printf(" The memory table is empty.\n");
 		return 0;
 	}
 	else{
-		//printf(" I - __memoryTableStart__ = %p\n", __memoryTableStart__);
-		//printf(" I - __memoryTableEnd__   = %p\n", __memoryTableEnd__);
 		temp = __memoryTableStart__;
 		if(__memoryTableStart__ == __memoryTableEnd__){
-			//printf(" 1) The memory getting deallocated is: %p\n", temp -> memoryAddress);
 			free(temp);
 			__memoryTableStart__ = NULL;
 			__memoryTableEnd__ = NULL;
@@ -115,7 +100,6 @@ unsigned int __popLinkedList(void *pointerAddress)
 		else{
 			while(temp != NULL){
 				if(temp -> memoryAddress == pointerAddress){	// I'm not checking for INVALID address condition.
-					//printf(" 2) The memory getting deallocated is: %p\n", temp -> memoryAddress);
 					if(temp == __memoryTableStart__){
 						__memoryTableStart__ = __memoryTableStart__ -> __rightlink;
 						__memoryTableStart__ -> __leftlink = NULL;
@@ -134,9 +118,6 @@ unsigned int __popLinkedList(void *pointerAddress)
 				temp = temp -> __rightlink;
 			}	
 		}
-		//getMemoryStatus();
-		//printf(" O - __memoryTableStart__ = %p\n", __memoryTableStart__);
-		//printf(" O - __memoryTableEnd__   = %p\n", __memoryTableEnd__);
 		return 0;
 	}
 }
@@ -153,11 +134,9 @@ void *smalloc(unsigned int size)
 	pointer = malloc(size);
 	if(pointer!=NULL){
 		if(__pushLinkedList(pointer,size) == 1){
-			//printf(" The push into the linked list was unsuccessful.\n");
 			free(pointer);
 		}
 	}
-	//printf(" The allocated memory location is: %p\n", pointer);
 	return pointer;
 }
 void *srealloc(void *pointerAddress,unsigned int size) /* Returns NULL if an error occured*/
@@ -166,7 +145,6 @@ void *srealloc(void *pointerAddress,unsigned int size) /* Returns NULL if an err
 	void *pointer;
 	unsigned int flag = 0;
 	if(pointerAddress == NULL){
-		//printf(" The memoryAddress is null, you first need to allocate memory.\n");
 		return NULL;
 	}
 	else{
@@ -182,7 +160,6 @@ void *srealloc(void *pointerAddress,unsigned int size) /* Returns NULL if an err
 			temp = temp -> __rightlink;
 		}
 		if(flag == 0){
-			//printf(" Was not found in the memory table.\n");
 			return NULL;
 		}
 		else if(flag == 1){
@@ -197,7 +174,6 @@ unsigned int sfree(void *pointerAddress)
 		return 0;
 	}
 	else{
-		//printf(" Pointer is NULL.\n");
 		return 0;
 	}
 }
@@ -205,7 +181,6 @@ unsigned int freeAllMemeory()
 {
 	struct __memoryTable *temp;
 	if(__memoryTableStart__ == NULL){
-		//printf(" No allocated memory.\n");
 		return 0;
 	}
 	else{

@@ -16,6 +16,19 @@
 	2 -> File failed to open.
 */
 int globalLineCounter = 0,globalOccurencesCounter = 0;
+char *strrev(char *str)
+{
+      char *p1, *p2;
+      if (! str || ! *str)
+            return str;
+      for (p1 = str, p2 = str + strlen(str) - 1; p2 > p1; ++p1, --p2)
+      {
+            *p1 ^= *p2;
+            *p2 ^= *p1;
+            *p1 ^= *p2;
+      }
+      return str;
+}
 void charcmpi(char a,char b)
 {
 
@@ -84,7 +97,15 @@ int openFileToSearch(char *pattern,char *fileName,char *option)
 		}
 	}
 	else{
-		buffer = (char*)smalloc(bufferSize);
+		char *reversePattern = NULL;
+		if(optionContains('r',option+1) == 1){	
+			buffer = (char*)smalloc(bufferSize);
+			reversePattern = (char*)smalloc(sizeof(strlen(pattern)));
+			//printf(" The pattern is: %s\n", pattern);
+			strcpy(reversePattern,pattern);
+			strrev(reversePattern);
+			//printf(" The pattern is: %s and reverse pattern is: %s\n", pattern,reversePattern);
+		}
 		//printf("->%s<-\n", option);
 		while(fgets(buffer,bufferSize,file) != NULL){
 			if(strlen(buffer) == bufferSize - 1){
@@ -94,11 +115,15 @@ int openFileToSearch(char *pattern,char *fileName,char *option)
 				continue;
 	 		}
 			*(buffer + strlen(buffer) - 1) = '\0'; /* To remove the newline character at the end of the line*/
+			//printf(" The buffer read from the file is: %s\n", buffer);
 			if(optionContains('i',option+1) == 1){
 				printf(" Contains i.\n");
 			}
-			if(optionContains('r',option+1) == 1){
-				printf(" Contains r.\n");
+			if(optionContains('r',option+1) == 1){	//Is working as of 1/1/19
+				//printf(" Contains r.\n");
+				if(searchPattern(reversePattern,buffer) == 1){
+					flag = 1;
+				}
 			}
 			if(optionContains('v',option+1) == 1){
 				printf(" Contains v.\n");
@@ -112,8 +137,9 @@ int openFileToSearch(char *pattern,char *fileName,char *option)
 			if(optionContains('z',option+1) == 1){
 				printf(" Contains 0.\n");
 			}
-			break;		
+			//break;	
 		}
+		//printf(" The buffer is: %s\n", buffer);
 	}
 	fclose(file);
 	sfree(buffer);
@@ -222,6 +248,9 @@ int main(int argc, char const *argv[])
 			printf(" File \"%s\" not albe to open.\n", completePathName);
 		}
 		freeAllMemeory();
+		if(getMemoryStatus() != 0){
+			printf(" The memory was not correctly freed. Please fix the bug in the \"salloc.h\" header file.\n");
+		}
 	}
 	return 0;
 }

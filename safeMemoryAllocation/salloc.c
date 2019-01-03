@@ -6,7 +6,6 @@
 #endif
 /* 
 	Using a doubly linked list to store the allocated space
-	Please keep in mind this program only support int,char,float,double.(Not quite sure)
 	0 -> Success
 	1 -> Failure
 */
