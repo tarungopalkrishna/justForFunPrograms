@@ -16,6 +16,7 @@
 	2 -> File failed to open.
 */
 int globalLineCounter = 0,globalOccurencesCounter = 0;
+//Function was coppied from stackoverflow
 char *strrev(char *str)
 {
       char *p1, *p2;
