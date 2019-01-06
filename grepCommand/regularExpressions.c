@@ -249,7 +249,7 @@ int main(int argc, char const *argv[])
 		}
 		freeAllMemeory();
 		if(getMemoryStatus() != 0){
-			printf(" The memory was not correctly freed. Please fix the bug in the \"salloc.h\" header file.\n");
+			printf(" The memory was not correctly freed.Please fix the bug in the \"salloc.h\" header file.\n");
 		}
 	}
 	return 0;
