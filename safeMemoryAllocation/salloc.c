@@ -27,11 +27,11 @@ unsigned int __pushLinkedList(void *pointerAddress,unsigned int size);	//Push in
 unsigned int __popLinkedList(void *pointerAddress);	//Pop from the linked list.
 void __updateLinkedList(void *updateAddress,void *newMemoryAddress,unsigned int size); // To update if memory is reallocated
 /* The functions that the programmer can use*/
-extern unsigned int getMemoryStatus();	//Gets the currrent allocated addresses.
-extern void *smalloc(unsigned int size);	//allocated memory and push into the linked list.
-extern void *srealloc(void *pointerAddress,unsigned int size);		//reallocates a new piece of memory and updates __memoryTable
-extern unsigned int sfree(void *pointerAddress);	//free memory and pop it from the linked list.
-extern unsigned int freeAllMemeory();	//free all the allocated memory
+unsigned int getMemoryStatus();	//Gets the currrent allocated addresses.
+void *smalloc(unsigned int size);	//allocated memory and push into the linked list.
+void *srealloc(void *pointerAddress,unsigned int size);		//reallocates a new piece of memory and updates __memoryTable
+unsigned int sfree(void *pointerAddress);	//free memory and pop it from the linked list.
+unsigned int freeAllMemory();	//free all the allocated memory
 // FUNCTION DEFINITIONS
 void *__getMemory(void *pointerAddress,unsigned int size)/* Allocated a node for __memoryTable*/
 {
@@ -172,7 +172,7 @@ void *scalloc(unsigned int arraySize,unsigned int size)
 	//printf(" The allocated memory location is: %p\n", pointer);
 	return pointer;	
 }
-void *srealloc(void *pointerAddress,unsigned int size) /* Returns NULL if an error occured*/
+void* srealloc(void *pointerAddress,unsigned int size) /* Returns NULL if an error occured*/
 {
 	struct __memoryTable *temp;
 	void *pointer;
@@ -213,7 +213,7 @@ unsigned int sfree(void *pointerAddress)
 		return 0;
 	}
 }
-unsigned int freeAllMemeory()
+unsigned int freeAllMemory()
 {
 	struct __memoryTable *temp;
 	if(__memoryTableStart__ == NULL){
@@ -227,6 +227,41 @@ unsigned int freeAllMemeory()
 			temp = temp -> __rightlink;
 		}
 		return 0;
+	}
+	return 1;
+}
+//The following function takes a number and the same number of varibales concatenates them and allocates 
+//new memory and returns the address. 
+char *concat(int number,...)
+{
+	if(number > 0){
+		int size = 0,count = 1;
+		char *stringParser,*returnString;
+		va_list argument;
+		va_start(argument, number);
+		stringParser 	= va_arg(argument,char*);
+		size 			= size + strlen(stringParser);
+		returnString 	= (char*)smalloc(size);
+		strcpy(returnString,stringParser);
+		/* This part of the code is not tested for multile cases*/
+		while(count < number){
+			stringParser 	= va_arg(argument,char*);
+			size 			= size + strlen(stringParser);
+			returnString 	= (char*)srealloc(returnString,size);
+			strcat(returnString,stringParser);
+			count++;
+		}
+		/* End of not tested code*/
+		va_end(argument);
+		return returnString;
+	}
+	else if(number == 0){
+		printf(" case 0 still not bulit, sorry.\n");
+		return NULL;
+	}
+	else{
+		printf(" The first argument must be a value greater than or equal 1.\n");
+		return NULL;
 	}
 }
 #endif
