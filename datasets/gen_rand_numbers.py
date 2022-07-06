@@ -3,7 +3,7 @@ import numpy as np
 
 LOWER_LIMIT=0
 UPPER_LIMIT=65536
-LENGTH=50000
+LENGTH=5000000
 
 
 def gen_numbers(length=5000, l_limit=0, u_limit=65536):

@@ -1,5 +1,5 @@
 from time import perf_counter
-LENGTH=5000
+LENGTH=5000000
 
 
 def insertion(numbers: list, order="asc"):
@@ -28,5 +28,5 @@ def read_numbers(file="../datasets/unsorted_numbers.txt"):
 if __name__ == "__main__":
     numbers = read_numbers(file=f"../datasets/unsorted_numbers_{LENGTH}.txt")
     sorted_numbers = insertion(numbers=numbers)
-    assert sorted(numbers) == sorted_numbers
+    assert sorted(numbers) == sorted_numbers == numbers
     # print(sorted_numbers)
