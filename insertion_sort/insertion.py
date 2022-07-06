@@ -26,7 +26,9 @@ def read_numbers(file="../datasets/unsorted_numbers.txt"):
 
 
 if __name__ == "__main__":
-    numbers = read_numbers(file=f"../datasets/unsorted_numbers_{LENGTH}.txt")
+    # numbers = read_numbers(file=f"../datasets/unsorted_numbers_{LENGTH}.txt")
+    # numbers = read_numbers(file=f"../datasets/descending_numbers_{LENGTH}.txt")
+    numbers = read_numbers(file=f"../datasets/ascending_numbers_{LENGTH}.txt")
     sorted_numbers = insertion(numbers=numbers)
     assert sorted(numbers) == sorted_numbers == numbers
     # print(sorted_numbers)

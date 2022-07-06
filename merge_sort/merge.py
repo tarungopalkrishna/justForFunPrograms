@@ -46,7 +46,9 @@ def read_numbers(file="../datasets/unsorted_numbers.txt"):
 
 
 if __name__ == "__main__":
-    numbers = read_numbers(file=f"../datasets/unsorted_numbers_{LENGTH}.txt")
+    # numbers = read_numbers(file=f"../datasets/unsorted_numbers_{LENGTH}.txt")
+    # numbers = read_numbers(file=f"../datasets/descending_numbers_{LENGTH}.txt")
+    numbers = read_numbers(file=f"../datasets/ascending_numbers_{LENGTH}.txt")
     start = perf_counter()
     merge_sort(numbers=numbers)
     print(f"The total time to sort {LENGTH} elements is {perf_counter() - start}")
