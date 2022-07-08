@@ -1,5 +1,5 @@
 from time import perf_counter
-LENGTH=5000000
+LENGTH=5000
 
 
 def get_pivot(numbers: list) -> int:
@@ -42,13 +42,14 @@ def read_numbers(file="../datasets/unsorted_numbers.txt"):
         # print(numbers)
         numbers = " ".join(numbers)
         numbers = numbers.split(" ")
+        # print(numbers)
         return list(map(int, numbers))
 
 
 if __name__ == "__main__":
-    # numbers = read_numbers(file=f"../datasets/unsorted_numbers_{LENGTH}.txt")
+    numbers = read_numbers(file=f"../datasets/unsorted_numbers_{LENGTH}.txt")
     # numbers = read_numbers(file=f"../datasets/descending_numbers_{LENGTH}.txt")
-    numbers = read_numbers(file=f"../datasets/ascending_numbers_{LENGTH}.txt")
+    # numbers = read_numbers(file=f"../datasets/ascending_numbers_{LENGTH}.txt")
     start = perf_counter()
     merge_sort(numbers=numbers)
     print(f"The total time to sort {LENGTH} elements is {perf_counter() - start}")
